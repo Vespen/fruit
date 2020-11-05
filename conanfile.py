@@ -12,7 +12,7 @@ class FruitConan(ConanFile):
     description = "C++ dependency injection framework"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "use_boost": [True, False]}
-    default_options = {"shared": False, "use_boost": True}
+    default_options = {"shared": False, "use_boost": False}
     generators = "cmake"
     exports = "COPYING"
     _source_subfolder = "source_subfolder"
@@ -52,6 +52,7 @@ class FruitConan(ConanFile):
                 self._cmake.definitions["Boost_INCLUDE_DIR"] = os.path.join(
                     self.deps_cpp_info["boost"].rootpath, "include")
             if self.settings.os == "Windows":
+                self._cmake.definitions["FRUIT_HAS_FORCEINLINE"] = "NO"
                 self._cmake.definitions["FRUIT_TESTS_USE_PRECOMPILED_HEADERS"] = "NO"
             self._cmake.definitions["CMAKE_BUILD_TYPE"] = self.settings.build_type
             self._cmake.configure(source_folder=self._source_subfolder)
